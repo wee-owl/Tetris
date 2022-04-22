@@ -2,6 +2,14 @@ import {tetrominoes} from './tetrominoes.js';
 import {ROWS, COLUMNS} from '../index.js';
 
 export class Game {
+
+    score = 0;
+    lines = 0;
+    level = 1;
+    record = localStorage.getItem('tetris-record') || 0;
+    points = [0, 100, 300, 700, 1500];
+    gameOver = false;
+
     area = [
         ['o','o','o','o','o','o','o','o','o','o'],
         ['o','o','o','o','o','o','o','o','o','o'],
@@ -50,7 +58,6 @@ export class Game {
         this.nextTetromino = this.createTetromino();
     }
 
-
     moveLeft() {
         if (this.checkOutPosition(this.activeTetromino.x - 1, this.activeTetromino.y)) {
             this.activeTetromino.x -= 1;
@@ -64,6 +71,7 @@ export class Game {
     }
 
     moveDown() {
+        if (this.gameOver) return;
         if (this.checkOutPosition(this.activeTetromino.x, this.activeTetromino.y + 1)) {
             this.activeTetromino.y += 1;
         } else {
@@ -89,8 +97,6 @@ export class Game {
             this.activeTetromino.rotation[this.activeTetromino.rotationIndex];
         }
     }
-
-
 
     get viewArea() {
         const area = JSON.parse(JSON.stringify(this.area));
@@ -135,7 +141,10 @@ export class Game {
             }
         }
         this.changeTetromino();
-        this.clearRow();
+        const countRow = this.clearRow();
+        this.calcScore(countRow);
+        this.updatePanels();
+        this.gameOver = !this.checkOutPosition(this.activeTetromino.x, this.activeTetromino.y);
     }
 
     clearRow() {
@@ -161,6 +170,28 @@ export class Game {
             this.area.unshift(Array(COLUMNS).fill('o'));
         })
 
+        return rows.length;
     }
 
+    calcScore(lines) {
+        this.score += this.points[lines];
+        this.lines += lines;
+        this.level = Math.floor(this.lines / 10) + 1;
+
+        if (this.score > this.record) {
+            this.record = this.score;
+            localStorage.setItem('tetris-record', this.score);
+        }
+    }
+
+    createUpdatePanels(showScore, showNextTetromino) {
+        showScore(this.lines, this.score, this.level, this.record);
+        showNextTetromino(this.nextTetromino.block);
+
+        this.updatePanels = () => {
+            showScore(this.lines, this.score, this.level, this.record);
+            showNextTetromino(this.nextTetromino.block);
+
+        }
+    }
 }
