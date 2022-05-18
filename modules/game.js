@@ -1,5 +1,5 @@
 import { tetrominoes } from '/Tetris/modules/tetrominoes.js';
-import { ROWS, COLUMNS } from '/Tetris/modules/index.js';
+import { ROWS, COLUMNS } from '/Tetris/index.js';
 
 export class Game {
     score = 0;
