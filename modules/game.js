@@ -1,4 +1,4 @@
-import { tetrominoes } from './tetrominoes.js'
+import { tetrominoes } from '../tetrominoes.js'
 import { ROWS, COLUMNS } from '../index.js';
 
 export class Game {
