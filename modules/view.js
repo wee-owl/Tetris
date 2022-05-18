@@ -1,4 +1,4 @@
-import { SIZE_BLOCK, COLUMNS, ROWS } from "../index.js";
+import { SIZE_BLOCK, COLUMNS, ROWS } from "/Tetris/index.js";
 
 export class View {
     constructor (container) {
