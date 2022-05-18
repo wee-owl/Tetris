@@ -1,13 +1,14 @@
-import {tetrominoes} from './tetrominoes.js';
-import {ROWS, COLUMNS} from '../index.js';
+import { tetrominoes } from './tetrominoes.js'
+import { ROWS, COLUMNS } from '../index.js';
 
 export class Game {
-
     score = 0;
     lines = 0;
-    level = 1;
+    lvl = 1;
     record = localStorage.getItem('tetris-record') || 0;
+
     points = [0, 100, 300, 700, 1500];
+
     gameOver = false;
 
     area = [
@@ -88,14 +89,13 @@ export class Game {
             this.activeTetromino.rotation[this.activeTetromino.rotationIndex];
 
         if (!this.checkOutPosition(this.activeTetromino.x, this.activeTetromino.y)) {
-
             this.activeTetromino.rotationIndex = 
-            this.activeTetromino.rotationIndex > 0 ? 
-                this.activeTetromino.rotationIndex - 1 : 3;
+                this.activeTetromino.rotationIndex > 0 ? 
+                    this.activeTetromino.rotationIndex - 1 : 3;
 
-        this.activeTetromino.block = 
-            this.activeTetromino.rotation[this.activeTetromino.rotationIndex];
-        }
+            this.activeTetromino.block = 
+                this.activeTetromino.rotation[this.activeTetromino.rotationIndex];
+        }    
     }
 
     get viewArea() {
@@ -104,13 +104,13 @@ export class Game {
 
         for (let i = 0; i < tetromino.length; i++) {
             const row = tetromino[i];
-
             for (let j = 0; j < row.length; j++) {
                 if (row[j] !== 'o') {
                     area[y + i][x + j] = tetromino[i][j];
-                };
+                }
             }
         }
+
         return area;
     }
 
@@ -126,7 +126,7 @@ export class Game {
                 }
             }
         }
-        return true
+        return true;
     }
 
     stopMove() {
@@ -140,6 +140,7 @@ export class Game {
                 }
             }
         }
+
         this.changeTetromino();
         const countRow = this.clearRow();
         this.calcScore(countRow);
@@ -155,9 +156,10 @@ export class Game {
 
             for (let j = 0; j < COLUMNS; j++) {
                 if (this.area[i][j] !== 'o') {
-                    countBlock += 1;
+                    countBlock++;
                 }
             }
+
             if (!countBlock) break;
 
             if (countBlock === COLUMNS) {
@@ -176,7 +178,7 @@ export class Game {
     calcScore(lines) {
         this.score += this.points[lines];
         this.lines += lines;
-        this.level = Math.floor(this.lines / 10) + 1;
+        this.lvl = Math.floor(this.lines / 10) + 1;
 
         if (this.score > this.record) {
             this.record = this.score;
@@ -185,13 +187,48 @@ export class Game {
     }
 
     createUpdatePanels(showScore, showNextTetromino) {
-        showScore(this.lines, this.score, this.level, this.record);
+        showScore(this.lines, this.score, this.lvl, this.record);
         showNextTetromino(this.nextTetromino.block);
 
         this.updatePanels = () => {
-            showScore(this.lines, this.score, this.level, this.record);
+            showScore(this.lines, this.score, this.lvl, this.record);
             showNextTetromino(this.nextTetromino.block);
-
         }
+    }
+
+    restart() {
+        this.score = 0;
+        this.lines = 0;
+        this.lvl = 1;
+        this.record = localStorage.getItem('tetris-record') || 0;
+
+        this.gameOver = false;
+
+        this.area = [
+            ['o','o','o','o','o','o','o','o','o','o'],
+            ['o','o','o','o','o','o','o','o','o','o'],
+            ['o','o','o','o','o','o','o','o','o','o'],
+            ['o','o','o','o','o','o','o','o','o','o'],
+            ['o','o','o','o','o','o','o','o','o','o'],
+            ['o','o','o','o','o','o','o','o','o','o'],
+            ['o','o','o','o','o','o','o','o','o','o'],
+            ['o','o','o','o','o','o','o','o','o','o'],
+            ['o','o','o','o','o','o','o','o','o','o'],
+            ['o','o','o','o','o','o','o','o','o','o'],
+            ['o','o','o','o','o','o','o','o','o','o'],
+            ['o','o','o','o','o','o','o','o','o','o'],
+            ['o','o','o','o','o','o','o','o','o','o'],
+            ['o','o','o','o','o','o','o','o','o','o'],
+            ['o','o','o','o','o','o','o','o','o','o'],
+            ['o','o','o','o','o','o','o','o','o','o'],
+            ['o','o','o','o','o','o','o','o','o','o'],
+            ['o','o','o','o','o','o','o','o','o','o'],
+            ['o','o','o','o','o','o','o','o','o','o'],
+            ['o','o','o','o','o','o','o','o','o','o'],
+        ];
+
+        this.activeTetromino = this.createTetromino();
+
+        this.nextTetromino = this.createTetromino();
     }
 }

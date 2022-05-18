@@ -1,42 +1,55 @@
 export class Controller {
+    pressed = 0;
+
     constructor (game, view) {
         this.game = game;
         this.view = view;
-        this.view.init();
     }
 
     init(codeKey) {
         window.addEventListener('keydown', event => {
-            if (event.code === codeKey) {
+            if (event.code === codeKey && this.pressed === 0) {
+                this.pressed = 1;
                 this.view.init();
                 this.start();
+            } else if (event.code === codeKey && this.pressed === 2) {
+                this.pressed = 1;
+                this.view.init();
+                this.game.restart();
+
+                this.view.showArea(this.game.viewArea);
+                const showScore = this.view.createBlockScore();
+                const showNextTetromino = this.view.createBlockNextTetromino();
+                this.game.createUpdatePanels(showScore, showNextTetromino);
             }
         })
     }
 
-    start() {
+    start () {
         this.view.showArea(this.game.viewArea);
-
-        this.game.createUpdatePanels(this.view.createBlockScore(), this.view.createBlockNextTetromino());
+        const showScore = this.view.createBlockScore();
+        const showNextTetromino = this.view.createBlockNextTetromino();
+        this.game.createUpdatePanels(showScore, showNextTetromino);
 
         const tick = () => {
-
-            const time = (1100 - 100 * this.game.level);
-
-
-            if (this.game.gameOver) return;
+            const time = (1100 - 100 * this.game.lvl);
+            if (this.game.gameOver) {
+                this.view.gameOver();
+                this.pressed = 2;
+            }
             setTimeout(() => {
                 this.game.moveDown();
                 this.view.showArea(this.game.viewArea);
-                tick()
-            }, time > 100 ? time : 100);
+                tick();
+            }, time >= 100 ? time : (100 - 2 * this.game.lvl));
         };
+
         tick();
 
         window.addEventListener('keydown', event => {
             const key = event.code;
-
-            switch (key) {
+            
+            switch(key) {
                 case 'ArrowLeft':
                     this.game.moveLeft();
                     this.view.showArea(this.game.viewArea);
