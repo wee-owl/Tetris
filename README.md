@@ -1,6 +1,18 @@
-## Project: ["Tetris"](https://wee-owl.github.io/Tetris/)
+# [Tetris](https://wee-owl.github.io/Tetris/)
 
-### Description:  
-The project was created as part of an intensive course conducted by the [Methed](https://methed.ru/) online school.  
+Tetris - это задание [Methed online school](https://methed.ru/), в котором реализуется логика игры, аналогичная логике игры в тетрис.  
 
-![Tetris_main](https://user-images.githubusercontent.com/95621680/169021938-a8216006-3d2d-4f75-927b-6ac5428c576a.JPG)
+<img src="https://github.com/wee-owl/Tetris/assets/95621680/a0306f97-c1e1-4e51-bff0-3dc3df44745e" width="500" height="">  
+
+## Технологии  
+- JavaScript
+- HTML
+- CSS
+
+## Реализованная функциональность
+- нажатие клавиши `enter` начинает игру
+- перемещение влево-вправо осуществляется клавишами перемещения со стрелками (← →) на клавиатуре
+- поворот фигуры осуществляется клавишей перемещения со стрелкой вверх (↑) на клавиатуре
+- ускорение движения фигуры вниз осуществляется клавишей перемещения со стрелкой вниз (↓) на клавиатуре
+- за каждый собранный горизонтальный ряд начисляется 100 очков
+- очки сохраняются в `local storage`
